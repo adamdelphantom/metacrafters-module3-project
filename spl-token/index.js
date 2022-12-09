@@ -3,6 +3,7 @@ import {
   Connection,
   Keypair,
   LAMPORTS_PER_SOL,
+  PublicKey,
 } from "@solana/web3.js";
 import {
   createMint,
@@ -11,11 +12,16 @@ import {
   transfer,
 } from "@solana/spl-token";
 
+// TODO: inject toWallet account
+// optional TODO: output ../spl-token-info-json
+
 (async () => {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
   const fromWallet = Keypair.generate();
-  const toWallet = Keypair.generate();
+  const toWalletPublicKey = new PublicKey(
+    "7uroHU7mZYTh9nQYh6jiZVpCdeewZKhsA5fAedaiELzz"
+  );
 
   const fromAirdropSignature = await connection.requestAirdrop(
     fromWallet.publicKey,
@@ -45,7 +51,7 @@ import {
     mint,
     fromTokenAccount.address,
     fromWallet.publicKey,
-    1000000000,
+    100000000000,
     []
   );
 
@@ -53,7 +59,7 @@ import {
     connection,
     fromWallet,
     mint,
-    toWallet.publicKey
+    toWalletPublicKey
   );
   signature = await transfer(
     connection,
@@ -61,7 +67,7 @@ import {
     fromTokenAccount.address,
     toTokenAccount.address,
     fromWallet.publicKey,
-    1000000000,
+    100000000000,
     []
   );
 })();
